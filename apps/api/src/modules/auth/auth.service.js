@@ -5,7 +5,7 @@ import {userDto} from "./auth.dto.js"
 export async function signin({email, password}) {
     const user = await authRepo.findByEmail(email)
 
-    if (user.password !== password) {
+    if (!user || user.password !== password) {
         const error = new Error("Invalid credentials")
         error.statusCode = 401
         throw error

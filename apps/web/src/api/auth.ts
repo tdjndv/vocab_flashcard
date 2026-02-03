@@ -14,7 +14,8 @@ async function postJson<T>(path: string, body: unknown): Promise<ApiOk<T>> {
     const res = await fetch(`${BASE}${path}`, {
         method: "POST",
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(body)
+        body: JSON.stringify(body),
+        credentials: "include"
     })
 
     const payload = (await res.json().catch(() => ({}))) as ApiOk<T> | ApiErr;

@@ -6,8 +6,10 @@ export function notFound(req, res) {
 }
 
 export function generalError(error, req, res, next) {
-    res.status(error.statusCode).json({
+    const status = Number(error.statusCode || error.status || 500);
+
+    res.status(status).json({
         ok: false,
-        message: error.message
+        message: error.message || "Server error"
     })
 }

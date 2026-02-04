@@ -16,7 +16,7 @@ export async function listVocabRows(userId) {
     .orderBy("e.id", "asc");
 }
 
-export async function getVocabByUserIdVocabId(userId, vocabId) {
+export async function getVocabById(userId, vocabId) {
   return await db("vocabulary")
   .select("id", "user_id", "language", "word", "created_at", "updated_at")
   .where({user_id: userId, id: vocabId})
@@ -24,11 +24,22 @@ export async function getVocabByUserIdVocabId(userId, vocabId) {
 }
 
 export async function updateVocabById(userId, vocabId, {word, language}) {
-  return await db("vocabulary")
+  const [updated] = await db("vocabulary")
     .where({id: vocabId, user_id: userId})
     .update({
       word: word,
       language: language,
       updated_at: db.fn.now()
     })
+    .returning(["id", "user_id", "word", "language", "created_at", "updated_at"])
+
+    return updated;
+}
+
+export async function deleteVocabById(userId, vocabId) {
+  const deleteCount = await db("vocabulary")
+  .where({id: vocabId, user_id: userId})
+  .del()
+
+  return deleteCount
 }

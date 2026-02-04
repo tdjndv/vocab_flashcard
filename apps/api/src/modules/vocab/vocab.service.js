@@ -25,16 +25,16 @@ function groupRows(rows) {
 }
 
 
-export async function vocabList(userId) {
+export async function getVocabList(userId) {
     const rows = await vocabRepo.listVocabRows(userId)
     return groupRows(rows)
 }
 
 export async function getVocabById(userId, vocabId) {
-    const row = await vocabRepo.getVocabByUserIdVocabId(userId, vocabId)
+    const row = await vocabRepo.getVocabById(userId, vocabId)
 
     if (!row) {
-        const error = new Error("word doens't exist")
+        const error = new Error("word doesn't exist")
         error.statusCode = 404
         throw error
     }
@@ -43,13 +43,22 @@ export async function getVocabById(userId, vocabId) {
 }
 
 export async function updateVocabById(userId, vocabId, {word, language}) {
-    if (!world || !language || word === "" || language === "") {
-        const e = new Error("word and language are required for updating")
+    const row = await vocabRepo.updateVocabById(userId, vocabId, {word, language})
+
+    if (!row) {
+        const e = new Error("word does not exist")
         e.statusCode = 400
         throw e
     }
+    return row
+}
 
-    const row = await vocabRepo.updateVocabById(userId, vocabId, {word, language})
-
-    if (!row) {}
+export async function deleteVocabById(userId, vocabId) {
+    const deleteCount = await vocabRepo.deleteVocabById(userId, vocabId)
+    if (deleteCount === 0) {
+        const e = new Error("word does not exist")
+        e.statusCode = 400
+        throw e
+    }
+    return true
 }

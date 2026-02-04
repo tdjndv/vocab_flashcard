@@ -1,9 +1,9 @@
 import * as vocabService from "./vocab.service.js"
 
-export async function getVocabList(req, res, next) {
+export async function getVocabList(req, res) {
     const userId = req.user.id
 
-    const vocabs = await vocabService.vocabList(userId)
+    const vocabs = await vocabService.getVocabList(userId)
 
     return res.json({ok: true, data: vocabs})
 }
@@ -17,14 +17,21 @@ export async function getVocabById(req, res) {
     return res.json({ok: true, data: vocab})
 }
 
-export async function updateVocab(req, res) {
+export async function updateVocabById(req, res) {
     const userId = req.user.id
     const vocabId = req.validated.params.id
+    const updateInfo = req.validated.body
 
-    
+    const vocab = await vocabService.updateVocabById(userId, vocabId, updateInfo)
 
-
+    return res.json({ok: true, data: vocab})
 }
-export async function deleteVocab(req, res) {}
 
-export async function addEntry(req, res) {}
+export async function deleteVocabById(req, res) {
+    const userId = req.user.id
+    const vocabId = req.validated.params.id
+    
+    await vocabService.deleteVocabById(userId, vocabId)
+
+    return res.json({ok: true})
+}

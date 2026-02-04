@@ -2,7 +2,7 @@ import * as authRepo from "./auth.repo.js"
 
 import {userDto} from "./auth.dto.js"
 
-export async function signin({email, password}) {
+export async function signIn({email, password}) {
     const user = await authRepo.findByEmail(email)
 
     if (!user || user.password !== password) {
@@ -13,7 +13,7 @@ export async function signin({email, password}) {
     return userDto(user)
 }
 
-export async function signup({email, password}) {
+export async function signUp({email, password}) {
     const existing = await authRepo.findByEmail(email)
     if (existing) {
         const error = new Error("Email already exists")

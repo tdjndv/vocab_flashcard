@@ -6,7 +6,7 @@ const emailSchema = z
   .email("invalid email")
   .transform((s) => s.toLowerCase());
 
-export const signupSchema = z.object({
+export const signUpSchema = z.object({
   body: z.object({
     email: emailSchema,
     password: z
@@ -16,7 +16,7 @@ export const signupSchema = z.object({
   }),
 });
 
-export const signinSchema = z.object({
+export const signInSchema = z.object({
   body: z.object({
     email: emailSchema,
     password: z.string().min(1, "password is required"),

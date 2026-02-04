@@ -29,3 +29,27 @@ export async function vocabList(userId) {
     const rows = await vocabRepo.listVocabRows(userId)
     return groupRows(rows)
 }
+
+export async function getVocabById(userId, vocabId) {
+    const row = await vocabRepo.getVocabByUserIdVocabId(userId, vocabId)
+
+    if (!row) {
+        const error = new Error("word doens't exist")
+        error.statusCode = 404
+        throw error
+    }
+
+    return row
+}
+
+export async function updateVocabById(userId, vocabId, {word, language}) {
+    if (!world || !language || word === "" || language === "") {
+        const e = new Error("word and language are required for updating")
+        e.statusCode = 400
+        throw e
+    }
+
+    const row = await vocabRepo.updateVocabById(userId, vocabId, {word, language})
+
+    if (!row) {}
+}

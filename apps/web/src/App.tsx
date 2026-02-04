@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import SignInPage from "./pages/SignInPage";
 import SignUpPage from "./pages/SignUpPage";
+import VocabPage from "./pages/VocabPage"
 
 export default function App() {
   return (
@@ -10,7 +11,7 @@ export default function App() {
 
       <Route path="/signin" element={<SignInPage />} />
       <Route path="/signup" element={<SignUpPage />} />
-
+      <Route path="/vocab" element={<VocabPage />} />
       {/* 未匹配到的路由 */}
       <Route path="*" element={<Navigate to="/signin" replace />} />
     </Routes>

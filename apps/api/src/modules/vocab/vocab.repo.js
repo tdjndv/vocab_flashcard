@@ -43,3 +43,13 @@ export async function deleteVocabById(userId, vocabId) {
 
   return deleteCount
 }
+
+export async function addVocab(userId, {word, language}) {
+  const [row] = await db("vocabulary")
+  .insert({
+    user_id: userId,
+    word: word,
+    language: language
+  }).returning(["id", "word", "language"])
+  return row
+}

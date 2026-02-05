@@ -15,3 +15,10 @@ export const updateVocabByIdSchema = z.object({
         language: z.string().trim().min(1, "language cannot be empty")
     })
 })
+
+export const addVocabSchema = z.object({
+    body: z.object({
+        word: z.string().trim().min(1, "Word cannot be empty"),
+        language: z.string().trim().min(1, "language cannot be empty")
+    })
+})

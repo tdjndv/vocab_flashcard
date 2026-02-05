@@ -62,3 +62,14 @@ export async function deleteVocabById(userId, vocabId) {
     }
     return true
 }
+
+export async function createVocab(userId, {word, language}) {
+    const row = await vocabRepo.addVocab(userId, {word, language})
+
+    if (!row) {
+        const e = new Error("Word cannot be added")
+        e.statusCode = 400
+        throw e
+    }
+    return row
+}

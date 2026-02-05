@@ -6,7 +6,7 @@ import {asyncHandler} from "../../utils/asyncHandler.js"
 
 import * as vocabController from "./vocab.controller.js"
 
-import { getVocabByIdSchema, updateVocabByIdSchema } from "./vocab.schema.js"
+import { addVocabSchema, getVocabByIdSchema, updateVocabByIdSchema } from "./vocab.schema.js"
 
 import {validate} from "../../middleware/validate.js"
 
@@ -19,5 +19,7 @@ router.get("/:id", validate(getVocabByIdSchema), requireAuth, asyncHandler(vocab
 router.put("/:id", validate(updateVocabByIdSchema), requireAuth, asyncHandler(vocabController.updateVocabById))
 
 router.delete("/:id", validate(getVocabByIdSchema), requireAuth, asyncHandler(vocabController.deleteVocabById))
+
+router.post("/", validate(addVocabSchema), requireAuth, asyncHandler(vocabController.createVocab))
 
 export default router

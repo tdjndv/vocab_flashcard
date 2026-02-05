@@ -35,3 +35,12 @@ export async function deleteVocabById(req, res) {
 
     return res.json({ok: true})
 }
+
+export async function createVocab(req, res) {
+    const userId = req.user.id
+    const createInfo = req.validated.body
+
+    const vocab = await vocabService.createVocab(userId, createInfo)
+
+    return res.json({ok: true, data: vocab})
+}

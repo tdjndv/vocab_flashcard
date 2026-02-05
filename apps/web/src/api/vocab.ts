@@ -36,6 +36,11 @@ export async function updateVocabById(id: number, payload: VocabUpdate) : Promis
     return res.data.data
 }
 
+export async function addVocab(payload: VocabUpdate) : Promise<Vocab> {
+    const res = await api.post("/vocab", payload)
+    return res.data.data
+}
+
 export async function deleteVocabById(id: number) : Promise<void> {
     await api.delete(`/vocab/${id}`)
 }

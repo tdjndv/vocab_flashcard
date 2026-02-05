@@ -14,8 +14,9 @@ export function useAsync<TArgs extends unknown[], TResult>(
       const result = await fn(...args);
       return result;
     } catch (e: any) {
-      const msg = e?.payload?.message ?? e?.message ?? "Request failed";
+      const msg = e.response.data.message ?? "Request failed"
       setError(msg);
+      console.log(msg)
       throw e;
     } finally {
       setLoading(false);

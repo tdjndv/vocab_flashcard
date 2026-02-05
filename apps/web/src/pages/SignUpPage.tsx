@@ -1,15 +1,17 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { signup } from "../api/auth";
+import { useNavigate } from "react-router-dom";
+import { signUp } from "../api/auth";
 import { useAsync } from "../hooks/useAsync";
 
 export default function SignInPage() {
 
-  const signupReq = useAsync(signup);
+  const signupReq = useAsync(signUp);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("")
+
+  const navigate = useNavigate()
 
   function onEmailChange(e: React.ChangeEvent<HTMLInputElement>) {
     if (signupReq.error) signupReq.clearError()
@@ -26,19 +28,16 @@ export default function SignInPage() {
       setConfirm(e.target.value)
   }
 
-  function resetStorage() {
-    localStorage.removeItem("user")
-  }
-
   async function onSubmit(e: any) {
     e.preventDefault();
 
     try {
-        const res = await signupReq.run(email, password);
-    
-        localStorage.setItem("user", JSON.stringify(res.data));
+        const user = await signupReq.run(email, password);
+
+        console.log(user)
+        navigate("/vocab")
     } catch(e) {
-        
+        // catch rejected promise do nothing
     }
 
 
@@ -46,7 +45,7 @@ export default function SignInPage() {
 
   return (
     <div>
-      <h1>Sign in</h1>
+      <h1>Sign up</h1>
       <form onSubmit={onSubmit}>
         <div>
           <label>Email: </label>
@@ -83,8 +82,6 @@ export default function SignInPage() {
         <button disabled={signupReq.loading} type="submit">
           {signupReq.loading ? "Signing up..." : "Sign up"}
         </button>
-
-        <button type="button" onClick={resetStorage}>Logout</button>
 
       </form>  
     </div>

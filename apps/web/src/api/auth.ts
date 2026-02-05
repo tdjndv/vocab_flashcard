@@ -1,40 +1,27 @@
-const BASE = "http://localhost:3000"
+import {api} from "./client"
 
 export type UserDto = {
     id: number;
     email: string;
-    createdAt: string;
-    updatedAt?: string
+    createdAt: string
+    updatedAt?: string;
 }
 
-type ApiOk<T> = {ok: true; data: T}
-type ApiErr = {ok: false; message: string; issues?: unknown}
-
-async function postJson<T>(path: string, body: unknown): Promise<ApiOk<T>> {
-    const res = await fetch(`${BASE}${path}`, {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(body),
-        credentials: "include"
-    })
-
-    const payload = (await res.json().catch(() => ({}))) as ApiOk<T> | ApiErr;
-
-    if (!res.ok) {
-        const msg = (payload as ApiErr)?.message
-        const err = new Error(msg) as Error & {status: number; payload: unknown}
-        err.status = res.status
-        err.payload = payload
-        throw err
-    }
-
-    return payload as ApiOk<T>
+export async function signUp(email: string, password: string): Promise<UserDto> {
+    const res = await api.post("/auth/signup", {email, password})
+    return res.data.data
 }
 
-export function signup(email: string, password: string) {
-    return postJson<UserDto>("/auth/signup", {email, password})
+export async function signIn(email: string, password: string): Promise<UserDto> {
+    const res = await api.post("/auth/signin", {email, password})
+    return res.data.data
 }
 
-export function signin(email: string, password: string) {
-    return postJson<UserDto>("/auth/signin", {email, password})
+export async function signOut(): Promise<void> {
+    await api.post("/auth/signout")
+}
+
+export async function getMe(): Promise<UserDto> {
+    const res = await api.post("/auth/me")
+    return res.data.data
 }

@@ -2,10 +2,15 @@ import {useState} from "react"
 
 import {useAsync} from "../hooks/useAsync"
 
-import {fetchVocab, type Vocab} from "../api/vocab"
+import {getVocabList, type Vocab} from "../api/vocab"
+
+import {useAuth} from "../auth/AuthContext"
 
 export default function VocabPage() {
-    const getVocab = useAsync(fetchVocab)
+
+    const {user} = useAuth()
+
+    const getVocab = useAsync(getVocabList)
 
     const [vocab, setVocab] = useState<Vocab[]>([])
 
@@ -25,17 +30,9 @@ export default function VocabPage() {
         )
     }
 
-    if (vocab.length === 0) {
-        return (
-            <div>
-                you have no vocabs yet
-                <button onClick={onClick}>click me</button>
-            </div>
-        )
-    }
-
     return (
         <>
+        {user && <h2>You are signed in as {user.email}</h2>}
         <div>Hello World</div>
         <button onClick={onClick}>click me</button>
         <div>

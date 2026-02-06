@@ -1,19 +1,8 @@
 import {db} from "../../db.js";
 
 export async function listVocabRows(userId) {
-  return await db("vocabulary as v")
-    .leftJoin("vocab_entries as e", "e.vocab_id", "v.id")
-    .select(
-      "v.id as vocabId",
-      "v.language",
-      "v.word",
-      "e.id as entryId",
-      "e.definition",
-      "e.sample_sentence as sampleSentence"
-    )
-    .where("v.user_id", userId)
-    .orderBy("v.id", "desc")
-    .orderBy("e.id", "asc");
+  return await db("vocabulary")
+  .where({user_id: userId})
 }
 
 export async function getVocabById(userId, vocabId) {

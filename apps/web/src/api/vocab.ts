@@ -1,21 +1,16 @@
 import {api} from "./client"
 
-export type VocabEntry = {
-    id: number;
-    definition: string;
-    sampleSentence: string;
-}
-
 export type Vocab = {
     id: number;
     word: string;
     language: string;
-    entries: VocabEntry[];
+    note: string;
 }
 
 export type VocabUpdate = {
     word: string;
     language: string;
+    note: string;
 }
 
 export async function getVocabList() : Promise<Vocab[]> {

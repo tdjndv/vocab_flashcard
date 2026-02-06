@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { signUp } from "../api/auth";
 import { useAsync } from "../hooks/useAsync";
+import { useAuth } from "../auth/AuthContext";
 
 export default function SignInPage() {
 
@@ -12,6 +13,14 @@ export default function SignInPage() {
   const [confirm, setConfirm] = useState("")
 
   const navigate = useNavigate()
+
+  const {user} = useAuth()
+
+  useEffect(() => {
+    if (user) {
+      navigate("/vocab")
+    }
+  }, [user])
 
   function onEmailChange(e: React.ChangeEvent<HTMLInputElement>) {
     if (signupReq.error) signupReq.clearError()
@@ -39,8 +48,6 @@ export default function SignInPage() {
     } catch(e) {
         // catch rejected promise do nothing
     }
-
-
   }
 
   return (

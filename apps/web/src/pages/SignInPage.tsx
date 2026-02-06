@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { signIn, signOut } from "../api/auth";
 import { useAsync } from "../hooks/useAsync";
 
@@ -10,13 +10,18 @@ export default function SignInPage() {
 
   const {user, setUser} = useAuth()
 
-  const signinReq = useAsync(signIn);
-  const signoutReq = useAsync(signOut);
+  const signinReq = useAsync(signIn)
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const navigate = useNavigate()
+
+  useEffect(() => {
+    if (user) {
+      navigate("/vocab")
+    }
+  }, [user])
 
   function onEmailChange(e: React.ChangeEvent<HTMLInputElement>) {
     if (signinReq.error) signinReq.clearError();
@@ -33,28 +38,13 @@ export default function SignInPage() {
     
     try {
       const user = await signinReq.run(email, password);
-    
+      
       console.log(user)
       setUser(user)
       navigate("/vocab")
     } catch(e) {
       //catch rejected promise do nothing
     }
-
-    // ✅ 你应该在这里做一个“登录成功后的动作”
-    // 比如：navigate("/"), setUser(user), toast("signed in"), etc.
-    
-  }
-
-  async function onLogout() {
-    await signoutReq.run(); // or await signOut()
-    // ✅ 登出后通常也要清理 UI
-
-    setUser(null)
-
-    setEmail("");
-    setPassword("");
-    signinReq.clearError();
   }
 
   const errorMsg =
@@ -81,10 +71,6 @@ export default function SignInPage() {
 
         <button disabled={signinReq.loading} type="submit">
           {signinReq.loading ? "Signing in..." : "Sign in"}
-        </button>
-
-        <button disabled={signoutReq.loading} type="button" onClick={onLogout}>
-          {signoutReq.loading ? "Logging out..." : "Logout"}
         </button>
       </form>
     </div>

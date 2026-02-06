@@ -20,21 +20,22 @@ export default function VocabPage() {
   const getByIdReq = useAsync(getVocabById);
   const addReq = useAsync(addVocab)
 
-
   const [vocabs, setVocabs] = useState<Vocab[]>([]);
+
   const [wordQuery, setWordQuery] = useState("");
   const [languageQuery, setLanguageQuery] = useState("")
 
-
   const [selectedId, setSelectedId] = useState<number | null>(null);
 
-  // form state for update
+  
   const [editWord, setEditWord] = useState("");
   const [editLanguage, setEditLanguage] = useState("");
+  const [editNote, setEditNote] = useState("")
 
-  // form state for add (placeholder until you add API)
+  
   const [newWord, setNewWord] = useState("");
   const [newLanguage, setNewLanguage] = useState("");
+  const [newNote, setNewNote] = useState("")
 
   async function reload() {
     const data = await listReq.run();
@@ -64,6 +65,7 @@ export default function VocabPage() {
 
     setEditWord(v.word);
     setEditLanguage(v.language);
+    setEditNote(v.note)
   }, [selectedId, vocabs]);
 
   async function onSelect(id: number) {
@@ -85,7 +87,7 @@ export default function VocabPage() {
   async function onUpdateSelected() {
     if (selectedId == null) return;
 
-    const payload: VocabUpdate = { word: editWord, language: editLanguage };
+    const payload: VocabUpdate = { word: editWord, language: editLanguage, note: editNote};
     const updated = await updateReq.run(selectedId, payload);
 
     setVocabs((prev) => prev.map((x) => (x.id === selectedId ? updated : x)));
@@ -100,13 +102,15 @@ export default function VocabPage() {
     setSelectedId(null);
     setEditWord("");
     setEditLanguage("");
+    setEditNote("")
   }
 
   async function onAdd() {
-    const created = await addReq.run({word: newWord, language: newLanguage})
+    const created = await addReq.run({word: newWord, language: newLanguage, note: newNote})
     setVocabs((prev) => [created,...prev])
     setNewWord("")
     setNewLanguage("")
+    setNewNote("")
   }
 
   return (
@@ -149,7 +153,7 @@ export default function VocabPage() {
             <div key={v.id}>
               <button type="button" onClick={() => onSelect(v.id)}>
                 {selectedId === v.id ? "=>" : ""}
-                {v.word} ({v.language})
+                Word: {v.word} | note: {v.note} | language: ({v.language})
               </button>
             </div>
           ))
@@ -164,8 +168,6 @@ export default function VocabPage() {
           <div>Select a vocab from the list</div>
         ) : (
           <>
-            <div>ID: {selectedId}</div>
-
             <div>
               <label>Word: </label>
               <input value={editWord} onChange={(e) => setEditWord(e.target.value)} />
@@ -174,6 +176,11 @@ export default function VocabPage() {
             <div>
               <label>Language: </label>
               <input value={editLanguage} onChange={(e) => setEditLanguage(e.target.value)} />
+            </div>
+
+            <div>
+              <label>Note: </label>
+              <input value={editNote} onChange={(e) => setEditNote(e.target.value)} />
             </div>
 
             {updateReq.error && <div>Error: {updateReq.error}</div>}
@@ -195,19 +202,40 @@ export default function VocabPage() {
       <div>
         <h3>Add new vocab</h3>
 
-        <div>
-          <label>Word: </label>
-          <input value={newWord} onChange={(e) => setNewWord(e.target.value)} />
-        </div>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();   // prevent page refresh
+            onAdd().catch(() => {});
+          }}
+        >
+          <div>
+            <label>Word: </label>
+            <input
+              value={newWord}
+              onChange={(e) => setNewWord(e.target.value)}
+            />
+          </div>
 
-        <div>
-          <label>Language: </label>
-          <input value={newLanguage} onChange={(e) => setNewLanguage(e.target.value)} />
-        </div>
+          <div>
+            <label>Language: </label>
+            <input
+              value={newLanguage}
+              onChange={(e) => setNewLanguage(e.target.value)}
+            />
+          </div>
 
-        <button type="button" onClick={() => onAdd().catch(() => {})}>
-          Add
-        </button>
+          <div>
+            <label>Note: </label>
+            <input
+              value={newNote}
+              onChange={(e) => setNewNote(e.target.value)}
+            />
+          </div>
+
+          <button type="submit">
+            Add
+          </button>
+        </form>
       </div>
     </>
   );

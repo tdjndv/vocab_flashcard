@@ -41,16 +41,15 @@ export async function deleteVocabById(userId, vocabId) {
 export async function createVocab(userId, {word, language, note}) {
     try{
         const row = await vocabRepo.addVocab(userId, {word, language, note})
+        if (!row) {
+            const e = new Error("Word cannot be added")
+            e.statusCode = 400
+            throw e
+        }
+        return row
     } catch(e) {
         const err = new Error("insertion failed: possiblely duplicated word")
         err.statusCode = 400
         throw err
     }
-
-    if (!row) {
-        const e = new Error("Word cannot be added")
-        e.statusCode = 400
-        throw e
-    }
-    return row
 }

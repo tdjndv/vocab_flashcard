@@ -19,7 +19,7 @@ export default function SignInPage() {
 
   useEffect(() => {
     if (user) {
-      navigate("/vocab")
+      navigate("/vocab", {replace: true})
     }
   }, [user])
 

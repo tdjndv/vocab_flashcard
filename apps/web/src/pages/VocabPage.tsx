@@ -9,16 +9,23 @@ import {
   type Vocab,
   type VocabUpdate,
 } from "../api/vocab";
+
+
+import {signOut} from "../api/auth"
 import { useAuth } from "../auth/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export default function VocabPage() {
-  const { user } = useAuth();
+  const { user, setUser} = useAuth();
+
+  const navigate = useNavigate()
 
   const listReq = useAsync(getVocabList);
   const updateReq = useAsync(updateVocabById);
   const deleteReq = useAsync(deleteVocabById);
   const getByIdReq = useAsync(getVocabById);
   const addReq = useAsync(addVocab)
+  const signOutReq = useAsync(signOut)
 
   const [vocabs, setVocabs] = useState<Vocab[]>([]);
 
@@ -111,6 +118,17 @@ export default function VocabPage() {
     setNewWord("")
     setNewLanguage("")
     setNewNote("")
+  }
+
+  async function logOut() {
+    try{
+      await signOutReq.run()
+    } catch(e) {
+
+    } finally {
+      setUser(null)
+      navigate("/signin")
+    }
   }
 
   return (
@@ -236,6 +254,7 @@ export default function VocabPage() {
             Add
           </button>
         </form>
+        <button type="button" onClick={() => logOut().catch(() => {})} disabled={signOutReq.loading}>Sign out</button>
       </div>
     </>
   );

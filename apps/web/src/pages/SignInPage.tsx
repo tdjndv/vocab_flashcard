@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { signIn, signOut } from "../api/auth";
+import { signIn } from "../api/auth";
 import { useAsync } from "../hooks/useAsync";
 
 import {useNavigate} from "react-router-dom"

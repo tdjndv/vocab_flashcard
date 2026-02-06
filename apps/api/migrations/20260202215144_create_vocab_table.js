@@ -5,6 +5,7 @@ export async function up(knex) {
         t.integer("user_id").unsigned().notNullable()
         t.string("language", 10).notNullable()
         t.string("word", 255).notNullable()
+        t.string("note").notNullable()
 
         t.timestamp("created_at").notNullable().defaultTo(knex.fn.now())
         t.timestamp("updated_at").notNullable().defaultTo(knex.fn.now())

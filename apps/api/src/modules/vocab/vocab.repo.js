@@ -18,20 +18,20 @@ export async function listVocabRows(userId) {
 
 export async function getVocabById(userId, vocabId) {
   return await db("vocabulary")
-  .select("id", "user_id", "language", "word", "created_at", "updated_at")
   .where({user_id: userId, id: vocabId})
   .first()
 }
 
-export async function updateVocabById(userId, vocabId, {word, language}) {
+export async function updateVocabById(userId, vocabId, {word, language, note}) {
   const [updated] = await db("vocabulary")
     .where({id: vocabId, user_id: userId})
     .update({
       word: word,
       language: language,
+      note: note,
       updated_at: db.fn.now()
     })
-    .returning(["id", "user_id", "word", "language", "created_at", "updated_at"])
+    .returning("*")
 
     return updated;
 }
@@ -44,12 +44,14 @@ export async function deleteVocabById(userId, vocabId) {
   return deleteCount
 }
 
-export async function addVocab(userId, {word, language}) {
+export async function addVocab(userId, {word, language, note}) {
   const [row] = await db("vocabulary")
   .insert({
     user_id: userId,
     word: word,
+    note: note,
     language: language
-  }).returning(["id", "word", "language"])
+  })
+  .returning("*")
   return row
 }

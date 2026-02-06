@@ -42,8 +42,8 @@ export async function getVocabById(userId, vocabId) {
     return row
 }
 
-export async function updateVocabById(userId, vocabId, {word, language}) {
-    const row = await vocabRepo.updateVocabById(userId, vocabId, {word, language})
+export async function updateVocabById(userId, vocabId, {word, language, note}) {
+    const row = await vocabRepo.updateVocabById(userId, vocabId, {word, language, note})
 
     if (!row) {
         const e = new Error("word does not exist")
@@ -64,7 +64,7 @@ export async function deleteVocabById(userId, vocabId) {
 }
 
 export async function createVocab(userId, {word, language}) {
-    const row = await vocabRepo.addVocab(userId, {word, language})
+    const row = await vocabRepo.addVocab(userId, {word, language, note})
 
     if (!row) {
         const e = new Error("Word cannot be added")

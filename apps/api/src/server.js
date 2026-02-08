@@ -15,7 +15,8 @@ app.use(express.json())
 
 app.use(cookieParser())
 app.use(cors({
-  origin: ["http://localhost:3000", "http://localhost:5173"],
+  origin: ["http://localhost:5173"
+  ],
   credentials: true,
 }))
 
@@ -30,6 +31,6 @@ app.get("/", (req, res) => {
 app.use(errorHandler.notFound)
 app.use(errorHandler.generalError)
 
-app.listen(process.env.API_PORT, () => {
-    console.log("Server is listening on " + process.env.API_PORT)
+app.listen(process.env.PORT, () => {
+    console.log("Server is listening on " + process.env.PORT)
 })

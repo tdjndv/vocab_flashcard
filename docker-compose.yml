@@ -1,0 +1,18 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: vocab_flashcard
+      ports:
+        - "5432:5432"
+      volumes:
+        - vocab_pgdata:/var/lib/postgresql/data
+    
+  api:
+    build: ./apps/api
+    ports:
+      - "3000:3000"
+    environment:
+      - name=value

@@ -1,5 +1,4 @@
-import dotenv from "dotenv";
-dotenv.config({ path: "../../.env" });
+import "./src/env.js"
 
 const config = {
   client: "pg",

@@ -1,0 +1,32 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: vocab_flashcard
+    volumes:
+      - vocab_pgdata:/var/lib/postgresql/data
+
+  api:
+    build: ./apps/api
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/vocab_flashcard
+      NODE_ENV: production
+    depends_on:
+      - db
+    command: sh -c "npx knex migrate:latest && npm run start"
+    restart: unless-stopped
+
+  nginx:
+    build:
+      context: .
+      dockerfile: ./apps/web/Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - api
+    restart: unless-stopped
+
+volumes:
+  vocab_pgdata:

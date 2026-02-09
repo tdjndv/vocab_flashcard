@@ -13,6 +13,8 @@ services:
     environment:
       DATABASE_URL: postgresql://postgres:postgres@db:5432/vocab_flashcard
       NODE_ENV: production
+      PORT: 3000
+      JWT_SECRET: 56df22d6b5b72b9f5cf56cd7542d088dfadfdd913163705da205d89235446b6fa1d243dae8c0a1baf280732bf17a82850ae58214c4da3cc44ae037706221476e
     depends_on:
       - db
     command: sh -c "npx knex migrate:latest && npm run start"

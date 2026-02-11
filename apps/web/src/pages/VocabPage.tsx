@@ -132,32 +132,53 @@ export default function VocabPage() {
   }
 
   return (
-    <>
-      {user && <h2>You are signed in as {user.email}</h2>}
+    <div className="min-h-screen bg-[var(--bg)] py-6 px-4">
+      <div className="w-full flex flex-col items-center gap-4">
+        <div className="sticky z-50 w-full bg-[var(--bar-bg)] gap-2
+          grid grid-cols-[1fr_1fr_auto] items-end px-2">
 
-      {/* SEARCH */}
-      <div>
-        <label>Filter Language: </label>
-        <input
-            value={languageQuery}
-            onChange={(e) => setLanguageQuery(e.target.value)}
-            placeholder="e.g. en, fr"
-        />
+          <div className="flex flex-col">
+            <label className="text-white font-normal text-base">
+              Filter Language:
+            </label>
+            <input
+              className="border rounded bg-gray-100 px-2"
+              value={languageQuery}
+              onChange={(e) => setLanguageQuery(e.target.value)}
+              placeholder="e.g. en, fr"
+            />
+          </div>
 
-        <label>Search word: </label>
-        <input
-          value={wordQuery}
-          onChange={(e) => setWordQuery(e.target.value)}
-          placeholder="type to filter..."
-        />
+          <div className="flex flex-col">
+            <label className="text-white font-normal text-base">
+              Search word:
+            </label>
+            <input
+              className="border rounded bg-gray-100 px-2 h-6"
+              value={wordQuery}
+              onChange={(e) => setWordQuery(e.target.value)}
+              placeholder="type to filter..."
+            />
+          </div>
+          
+          <div className="flex flex-col self-end gap-2">
+            <button
+              className="border rounded bg-gray-100 px-2 h-6"
+              type="button"
+              onClick={() => {setWordQuery(""); setLanguageQuery("")}}>
+                Clear Filters
+            </button>
 
-        <button type="button" onClick={() => {setWordQuery(""); setLanguageQuery("")}
-        }> Clear Filters</button>
-
-        <button type="button" onClick={() => reload().catch(() => {})} disabled={listReq.loading}>
-          {listReq.loading ? "Loading..." : "Refresh"}
-        </button>
-      </div>
+            <button
+              className="border rounded bg-gray-100 px-2 h-6"
+              type="button" onClick={() => reload().catch(() => {})} disabled={listReq.loading}>
+              {listReq.loading ? "Loading..." : "Refresh"}
+            </button>
+          </div>
+        </div>
+      {user && <p className="text-white font-bold text-2xl">
+        You are signed in as {user.email}
+        </p>}
 
       {listReq.error && <div>Error: {listReq.error}</div>}
 
@@ -256,6 +277,7 @@ export default function VocabPage() {
         </form>
         <button type="button" onClick={() => logOut().catch(() => {})} disabled={signOutReq.loading}>Sign out</button>
       </div>
-    </>
+      </div>
+    </div>
   );
 }

@@ -1,12 +1,12 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import path from "path"
+import tailwindcss from '@tailwindcss/vite'
 
 // Use env override when running inside Docker
 const apiTarget = process.env.VITE_PROXY_TARGET || "http://localhost:3000"
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), tailwindcss()],
   server: {
     host: true,
     proxy: {
@@ -16,8 +16,5 @@ export default defineConfig({
         rewrite: (p) => p.replace(/^\/api/, ""),
       },
     },
-  },
-  css: {
-    postcss: path.resolve(__dirname, "postcss.config.js"),
   },
 })

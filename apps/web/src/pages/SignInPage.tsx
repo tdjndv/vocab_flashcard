@@ -3,7 +3,6 @@ import { signIn } from "../api/auth";
 import { useAsync } from "../hooks/useAsync";
 
 import {useNavigate} from "react-router-dom"
-
 import {useAuth} from "../auth/AuthContext"
 
 export default function SignInPage() {
@@ -53,26 +52,47 @@ export default function SignInPage() {
       : (signinReq.error as any)?.message ?? String(signinReq.error ?? "");
 
   return (
-    <div>
-      <h1>Sign in</h1>
-      {user && <h2>You are signed in as {user.email}</h2>}
-      <form onSubmit={onSubmit}>
-        <div>
-          <label>Email: </label>
-          <input value={email} onChange={onEmailChange} type="email" required />
-        </div>
+    <div className="min-h-screen pt-20 bg-[var(--bg)]">
+      <div className="mx-auto w-full max-w-[1000px] mt-20 flex flex-col items-center gap-4">
+        <p className="text-white font-bold text-2xl">
+          Sign in to Vocab Flashcard
+        </p>
 
-        <div>
-          <label>Password: </label>
-          <input value={password} onChange={onPasswordChange} type="password" required />
-        </div>
+        <form className="flex flex-col gap-2" onSubmit={onSubmit}>
+          <div className="flex flex-col">
+            <label className="text-white font-normal text-base">Email</label>
+            <input
+              className="w-full rounded border h-6 px-2 bg-gray-100"
+              value={email}
+              onChange={onEmailChange}
+              type="email"
+              required
+            />
+          </div>
 
-        {signinReq.error && <div>{errorMsg}</div>}
+          <div className="flex flex-col">
+            <label className="text-white font-normal text-base">Password</label>
+            <input
+              className="w-full h-6 rounded border bg-gray-100 px-2"
+              value={password}
+              onChange={onPasswordChange}
+              type="password"
+              required
+            />
+          </div>
 
-        <button disabled={signinReq.loading} type="submit">
-          {signinReq.loading ? "Signing in..." : "Sign in"}
-        </button>
-      </form>
+          {signinReq.error && <div className="error">{errorMsg}</div>}
+
+          <button
+            className="w-full h-8 rounded text-sm font-semibold text-lg
+              text-white bg-green-600 border"
+            disabled={signinReq.loading}
+            type="submit"
+          >
+            {signinReq.loading ? "Signing in..." : "Sign in"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

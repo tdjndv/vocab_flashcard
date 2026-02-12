@@ -92,6 +92,21 @@ export default function SignInPage() {
             {signinReq.loading ? "Signing in..." : "Sign in"}
           </button>
         </form>
+
+        <div className="flex flex-row gap-2">
+          <span className="text-white">
+            Don't have an account?
+          </span>
+
+          <a
+            href="/signup"
+            className="text-cyan-600 font-bold hover:text-cyan-700 text-base"
+          >
+            Sign up here
+          </a>
+
+
+        </div>
       </div>
     </div>
   );

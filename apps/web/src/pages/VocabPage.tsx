@@ -183,13 +183,13 @@ export default function VocabPage() {
       {listReq.error && <div>Error: {listReq.error}</div>}
 
       {/* LIST */}
-      <div>
-        <h3>Vocabs</h3>
+      <div className="w-full flex flex-col mx-auto max-w-[1000px] gap-3 items-center" >
+        <h3 className="text-2xl text-white font-bold">Vocabs</h3>
         {filtered.length === 0 ? (
-          <div>No results</div>
+          <div className="text-base text-white font-semibold">No vocab yet, add some to get started</div>
         ) : (
           filtered.map((v) => (
-            <div key={v.id}>
+            <div key={v.id} className="text-white font-semibold text-base">
               <button type="button" onClick={() => onSelect(v.id)}>
                 {selectedId === v.id ? "=>" : ""}
                 Word: {v.word} | note: {v.note} | language: ({v.language})
@@ -200,46 +200,59 @@ export default function VocabPage() {
       </div>
 
       {/* UPDATE / DELETE (only when selected) */}
-      <div>
-        <h3>Selected</h3>
+      <div className="flex flex-col gap-1 items-center">
+        <h3 className="text-white font-bold text-xl">Selected</h3>
 
         {selectedId == null ? (
-          <div>Select a vocab from the list</div>
+          <div className="text-white">No vocab is selected</div>
         ) : (
           <>
-            <div>
-              <label>Word: </label>
-              <input value={editWord} onChange={(e) => setEditWord(e.target.value)} />
+            <div className="flex flex-row">
+              <label className="text-white font-normal text-base mr-1 ">Word: </label>
+              <input className="border bg-gray-100 rounded px-2" value={editWord} onChange={(e) => setEditWord(e.target.value)} />
             </div>
 
-            <div>
-              <label>Language: </label>
-              <input value={editLanguage} onChange={(e) => setEditLanguage(e.target.value)} />
+            <div className="flex flex-row">
+              <label className="text-white font-normal text-base mr-1">Language: </label>
+              <input className="border bg-gray-100 rounded px-2" value={editLanguage} onChange={(e) => setEditLanguage(e.target.value)} />
             </div>
 
-            <div>
-              <label>Note: </label>
-              <input value={editNote} onChange={(e) => setEditNote(e.target.value)} />
+            <div className="flex flex-row">
+              <label className="text-white font-normal text-base mr-1">Note: </label>
+              <input className="border bg-gray-100 rounded px-2"value={editNote} onChange={(e) => setEditNote(e.target.value)} />
             </div>
 
             {updateReq.error && <div>Error: {updateReq.error}</div>}
             {deleteReq.error && <div>Error: {deleteReq.error}</div>}
             {getByIdReq.error && <div>Error: {getByIdReq.error}</div>}
 
-            <button type="button" onClick={() => onUpdateSelected().catch(() => {})} disabled={updateReq.loading}>
-              {updateReq.loading ? "Updating..." : "Update"}
-            </button>
 
-            <button type="button" onClick={() => onDeleteSelected().catch(() => {})} disabled={deleteReq.loading}>
-              {deleteReq.loading ? "Deleting..." : "Delete"}
-            </button>
+            <div className="flex flex-row gap-2">
+              <button
+                className="border bg-gray-100 rounded px-1"
+                type="button"
+                onClick={() => onUpdateSelected().catch(() => {})}
+                disabled={updateReq.loading}>
+                {updateReq.loading ? "Updating..." : "Update"}
+              </button>
+
+              <button
+                className="border bg-gray-100 rounded px-1"
+                type="button"
+                onClick={() => onDeleteSelected().catch(() => {})}
+                disabled={deleteReq.loading}>
+                {deleteReq.loading ? "Deleting..." : "Delete"}
+              </button>
+            </div>
           </>
         )}
       </div>
 
-      {/* ADD */}
-      <div>
-        <h3>Add new vocab</h3>
+      <div className="flex flex-col gap-1 items-center">
+        <h3
+          className="text-white font-bold text-xl">
+            Add new vocab
+        </h3>
 
         <form
           onSubmit={(e) => {
@@ -248,34 +261,40 @@ export default function VocabPage() {
           }}
         >
           <div>
-            <label>Word: </label>
-            <input
+            <label className="text-white font-normal text-base">Word: </label>
+            <input className="border bg-gray-100 rounded px-2"
               value={newWord}
               onChange={(e) => setNewWord(e.target.value)}
             />
           </div>
 
           <div>
-            <label>Language: </label>
-            <input
+            <label className="text-white font-normal text-base">Language: </label>
+            <input className="border bg-gray-100 rounded px-2"
               value={newLanguage}
               onChange={(e) => setNewLanguage(e.target.value)}
             />
           </div>
 
           <div>
-            <label>Note: </label>
-            <input
+            <label className="text-white font-normal text-base">Note: </label>
+            <input className="border bg-gray-100 rounded px-2"
               value={newNote}
               onChange={(e) => setNewNote(e.target.value)}
             />
           </div>
 
-          <button type="submit">
+          <button className="rounded border bg-gray-100 px-2" type="submit">
             Add
           </button>
         </form>
-        <button type="button" onClick={() => logOut().catch(() => {})} disabled={signOutReq.loading}>Sign out</button>
+        <button
+          className="rounded border bg-gray-100 px-2 mt-1"
+          type="button"
+          onClick={() => logOut().catch(() => {})}
+          disabled={signOutReq.loading}>
+          Sign out
+        </button>
       </div>
       </div>
     </div>

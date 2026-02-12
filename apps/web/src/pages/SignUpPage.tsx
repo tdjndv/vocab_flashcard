@@ -51,46 +51,75 @@ export default function SignInPage() {
   }
 
   return (
-    <div>
-      <h1>Sign up</h1>
-      <form onSubmit={onSubmit}>
-        <div>
-          <label>Email: </label>
-          <input 
-            value={email}
-            onChange={onEmailChange}
-            type="email"
-            required
-          />
+    <div className="min-h-screen pt-20 bg-[var(--bg)]">
+      <div className="mx-auto w-full max-w-[1000px] mt-20 flex flex-col items-center gap-4">
+    <p className="text-white font-bold text-2xl">
+      Sign up for Vocab Flashcard
+    </p>
+
+    <form className="flex flex-col gap-2" onSubmit={onSubmit}>
+      <div className="flex flex-col">
+        <label className="text-white font-normal text-base">Email</label>
+        <input
+          className="w-full rounded border h-6 px-2 bg-gray-100"
+          value={email}
+          onChange={onEmailChange}
+          type="email"
+          required
+        />
+      </div>
+
+      <div className="flex flex-col">
+        <label className="text-white font-normal text-base">Password</label>
+        <input
+          className="w-full h-6 rounded border bg-gray-100 px-2"
+          value={password}
+          onChange={onPasswordChange}
+          type="password"
+          required
+        />
+      </div>
+
+      <div className="flex flex-col">
+        <label className="text-white font-normal text-base">Confirm password</label>
+        <input
+          className="w-full h-6 rounded border bg-gray-100 px-2"
+          value={confirm}
+          onChange={onConfirmChange}
+          type="password"
+          required
+        />
+      </div>
+
+      {signupReq.error && (
+        <div className="w-full rounded border border-red-400 bg-red-100 px-3 py-2 text-sm text-red-800">
+          {String(signupReq.error)}
         </div>
+      )}
 
-        <div>
-          <label>Password: </label>
-          <input
-            value={password}
-            onChange={(onPasswordChange)}
-            type="password"
-            required
-          /> 
-        </div>
+      <button
+        className="w-full h-8 rounded text-sm font-semibold text-lg
+          text-white bg-green-600 border"
+        disabled={signupReq.loading}
+        type="submit"
+      >
+        {signupReq.loading ? "Signing up..." : "Sign up"}
+      </button>
+    </form>
 
-        <div>
-          <label>Confirm: </label>
-          <input
-            value={confirm}
-            onChange={(onConfirmChange)}
-            type="password"
-            required
-          /> 
-        </div>
+    <div className="flex flex-row gap-2">
+      <span className="text-white">
+        Already have an account?
+      </span>
 
-        {signupReq.error && <div>{signupReq.error}</div>}
-
-        <button disabled={signupReq.loading} type="submit">
-          {signupReq.loading ? "Signing up..." : "Sign up"}
-        </button>
-
-      </form>  
+      <a
+        href="/signin"
+        className="text-cyan-600 font-bold hover:text-cyan-700 text-base"
+      >
+        Sign in here
+      </a>
     </div>
+  </div>
+</div>
   );
 }

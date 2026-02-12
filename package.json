@@ -2,16 +2,25 @@
   "name": "vocab_flashcard",
   "version": "1.0.0",
   "private": true,
-  "workspaces": ["apps/*"],
+  "workspaces": [
+    "apps/*"
+  ],
   "scripts": {
     "dev": "concurrently -n web,api -c auto \"npm run dev -w apps/web\" \"npm run dev -w apps/api\"",
     "dev:web": "npm run dev -w apps/web",
     "dev:api": "npm run dev -w apps/api",
     "build": "npm run build -w apps/web",
-    "start:api": "npm run start -w apps/api"
+    "start:api": "npm run start -w apps/api",
+
+    "prisma:studio": "npm exec prisma studio -w apps/api",
+    "prisma:migrate": "npm exec prisma migrate dev -w apps/api",
+    "prisma:generate": "npm exec prisma generate -w apps/api"
   },
   "type": "commonjs",
   "devDependencies": {
     "concurrently": "^9.2.1"
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.4.0"
   }
 }

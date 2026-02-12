@@ -180,7 +180,7 @@ export default function VocabPage() {
         You are signed in as {user.email}
         </p>}
 
-      {listReq.error && <div>Error: {listReq.error}</div>}
+      {listReq.error && <div className="text-white">Error: {listReq.error}</div>}
 
       {/* LIST */}
       <div className="w-full flex flex-col mx-auto max-w-[1000px] gap-3 items-center" >

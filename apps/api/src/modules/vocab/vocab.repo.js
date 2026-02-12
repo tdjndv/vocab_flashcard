@@ -1,46 +1,62 @@
-import {db} from "../../db.js";
+import { prisma } from "../../prisma.js";
 
 export async function listVocabRows(userId) {
-  return await db("vocabulary")
-  .where({user_id: userId})
+  return await prisma.vocabulary.findMany({
+    where: { user_id: userId }
+  });
 }
 
 export async function getVocabById(userId, vocabId) {
-  return await db("vocabulary")
-  .where({user_id: userId, id: vocabId})
-  .first()
+  return await prisma.vocabulary.findFirst({
+    where: {
+      id: vocabId,
+      user_id: userId
+    }
+  });
 }
 
-export async function updateVocabById(userId, vocabId, {word, language, note}) {
-  const [updated] = await db("vocabulary")
-    .where({id: vocabId, user_id: userId})
-    .update({
-      word: word,
-      language: language,
-      note: note,
-      updated_at: db.fn.now()
-    })
-    .returning("*")
+export async function updateVocabById(userId, vocabId, { word, language, note }) {
+  // Prisma update requires a unique key
+  // Since id is unique already, we update by id
+  // but still protect ownership by checking userId first
 
-    return updated;
+  const existing = await prisma.vocabulary.findFirst({
+    where: { id: vocabId, userId }
+  });
+
+  if (!existing) return null;
+
+  return await prisma.vocabulary.update({
+    where: { id: vocabId },
+    data: {
+      word,
+      language,
+      note
+    }
+  });
 }
 
 export async function deleteVocabById(userId, vocabId) {
-  const deleteCount = await db("vocabulary")
-  .where({id: vocabId, user_id: userId})
-  .del()
+  const existing = await prisma.vocabulary.findFirst({
+    where: { id: vocabId, user_id: userId }
+  });
 
-  return deleteCount
+  if (!existing) return 0;
+
+  await prisma.vocabulary.delete({
+    where: { id: vocabId }
+  });
+
+  return 1;
 }
 
-export async function addVocab(userId, {word, language, note}) {
-  const [row] = await db("vocabulary")
-  .insert({
-    user_id: userId,
-    word: word,
-    note: note,
-    language: language
-  })
-  .returning("*")
-  return row
+export async function addVocab(userId, { word, language, note }) {
+  return await prisma.vocabulary.create({
+    data: {
+      userId,
+      word,
+      language,
+      note
+    }
+  });
 }

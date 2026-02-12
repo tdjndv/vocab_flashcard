@@ -1,23 +1,19 @@
-import {db} from "../../db.js"
+import {prisma} from "../../prisma.js"
 
 export async function findByEmail(email) {
-    return await db("users")
-    .select(["id", "email", "password", "created_at"])
-    .where({email})
-    .first()
+    return await prisma.user.findUnique({
+        where: {email}
+    })
 }
 
 export async function findById(id) {
-    return await db("users")
-    .select("id", "email", "password", "created_at")
-    .where({id})
-    .first()
+    return await prisma.user.findUnique({
+        where: {id}
+    })
 }
 
 export async function createUser({email, password}) {
-    const [user] = await db("users")
-    .insert({email, password})
-    .returning(["id", "email", "password", "created_at"])
-
-    return user
+    return await prisma.user.create({
+        data: {email, password}
+    })
 }

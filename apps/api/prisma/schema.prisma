@@ -1,0 +1,34 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id         Int          @id @default(autoincrement())
+  email      String       @unique @db.VarChar(255)
+  password   String       @db.VarChar(255)
+  created_at DateTime     @default(now()) @db.Timestamptz(6)
+  updated_at DateTime     @updatedAt @db.Timestamptz(6)
+  vocabulary vocabulary[]
+
+  @@map("users")
+}
+
+model vocabulary {
+  id         Int   @id @default(autoincrement())
+  user_id    Int
+  language   String   @db.VarChar(10)
+  word       String   @db.VarChar(255)
+  note       String   @db.VarChar(255)
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  updated_at DateTime @updatedAt @db.Timestamptz(6)
+  user      User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, language, word])
+  @@index([user_id])
+  @@map("vocabulary")
+}

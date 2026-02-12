@@ -10,7 +10,7 @@ Live Demo: http://3.129.66.37/
 ### Backend
 - Node.js + Express
 - PostgreSQL
-- Knex (queries + migrations)
+- Prisma (queries + migrations)
 
 ### Frontend
 - React

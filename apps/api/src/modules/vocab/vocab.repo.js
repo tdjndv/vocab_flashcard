@@ -53,7 +53,7 @@ export async function deleteVocabById(userId, vocabId) {
 export async function addVocab(userId, { word, language, note }) {
   return await prisma.vocabulary.create({
     data: {
-      userId,
+      user_id: userId,
       word,
       language,
       note

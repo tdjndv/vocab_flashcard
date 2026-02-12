@@ -118,6 +118,7 @@ export default function VocabPage() {
     setNewWord("")
     setNewLanguage("")
     setNewNote("")
+    
   }
 
   async function logOut() {
